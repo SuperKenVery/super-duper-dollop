@@ -48,14 +48,12 @@ class neuralNet:
         #  O  O
         #     O
         self.layers=[layer(inputs,neurons[0])] + [layer(neurons[index],i) for index,i in enumerate(neurons[1:])]
-        self.data=self.layers[0].data
-        self.output=self.layers[-1].output
-        for index,i in enumerate(self.layers[1:]):
-            i.data=self.layers[index].output
     def forward(self):
-        for i in self.layers:
-            i.forward()
-        return self.output
+        #for i in self.layers:
+        #    i.forward()
+        #return self.output
+        for i in range(len(self.layers)):
+            pass
     def loss(self):
         return f.loss(self.output,y)
     def reverse(self,y,lr=0.01):
