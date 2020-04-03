@@ -1,0 +1,58 @@
+import numpy as np
+import time,f
+
+np.random.seed(int(time.time()))
+
+class layer:
+    def __init__(self,inputs,neurons,w=None,b=None,activate=f.relu,loss=f.loss):
+        self.inputs=inputs
+        self.neurons=neurons
+        self.activate=activate
+        self.loss=loss
+        if not w:
+            self.w=np.random.randn((neurons,inputs))*0.01
+        else:
+            self.w=w.reshape((neurons,inputs))
+
+        if not b:
+            self.b=np.zeros((neurons,1))
+        else:
+            self.b=b.reshape((neurons,1))
+
+        self.data=np.zeros(inputs)
+        self.output=np.zeros(self.neurons)
+        self.answers=np.zeros(self.output.shape)
+    def forward(self):
+        self.wx=np.dot(self.w,self.data)
+        self.z=wx+self.b
+        a=self.activate(z)
+        self.output=a
+    def reverse(self,nextLayer,lr):
+        #lr:learning rate
+        self.da=np.dot(nextLayer.w.T,nextLayer.dz)
+        #最后一层：last layer.dz = last layer.a-y
+        self.dz=da*self.activate.reverse(self.output,self.z)
+        self.db=self.dz.sum(axis=1,keepdims=True)/self.dz.shape[1]
+        self.dw=np.dot(self.dz,self.data.T)/self.dz.shape[1]
+        self.w-=lr*self.dw
+        self.b-=lr*self.db
+
+class neuralNet:
+    def __init__(self,inputs,neurons):
+        #neurons: a list indicating the /*number*\ of neurons of /*each layer*\
+        #So if inputs==2, neurons==[4,6], the net looks like this:
+        #       O
+        #    O  O
+        #x1  O  O
+        #x2  O  O
+        #    O  O
+        #       O
+        self.layers=[layer(inputs,neurons[0])]+[layer(neurons[index-1],i) for index,i in enumerate(neurons[1:])]
+        self.data=self.layers[0].data
+        self.output=self.layers[-1].output
+        for index,i in enumerate(self.layers[1:]):
+            i.data=self.layers[index-1].output
+    def forward(self):
+        for i in self.layers:
+            i.forward()
+            
