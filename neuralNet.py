@@ -41,14 +41,14 @@ class neuralNet:
     def __init__(self,inputs,neurons):
         #neurons: a list indicating the /*number*\ of neurons of /*each layer*\
         #So if inputs==2, neurons==[4,6], the net looks like this:
-        #       O
-        #    O  O
-        #x1  O  O
-        #x2  O  O
-        #    O  O
-        #       O
+        #     O
+        #  O  O
+        #  O  O
+        #  O  O
+        #  O  O
+        #     O
         self.layers=[layer(inputs,neurons[0])] + [layer(neurons[index],i) for index,i in enumerate(neurons[1:])]
-        self.data=self.layers[0].output
+        self.data=self.layers[0].data
         self.output=self.layers[-1].output
         for index,i in enumerate(self.layers[1:]):
             i.data=self.layers[index].output
@@ -77,7 +77,7 @@ class neuralNet:
             step:   how many times to train before printing loss
                     -1 is never print
         '''
-        self.data=data
+        self.layers[0].data=data
         for time in range(1,times+1):
             self.forward()
             self.reverse(y)
