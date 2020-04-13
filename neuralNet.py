@@ -83,15 +83,30 @@ class neuralNet:
             self.reverse(y)
             if step and time%step==0:
                 print("Trained %d times. Loss is %s. Output is %s. Answer is %s. "%(time,self.loss(),str(self.layers[-1].output),str(y)))
-            
-if __name__=='__main__':
-    import h5py
-    np.random.seed(1)
-    data=(np.array([11,36,33,20,29])*100).reshape(-1,1)
-    answer=np.array([0.5]).reshape(-1,1)
-    net=neuralNet(5,[10,10,20,1])
-    #5 inputs, 3 layers
 
-    net.train(data,answer,1000,100)
+def create_net_to_train(filename,layers,neuron_per_layer,datakey='train_set_x',answerkey='train_set_y'):
+    import loader
+    data,answer,groups=loader.load(filename,datakey,answerkey)
+    data=data/255
+    class fixed_io_neural_net(neuralNet):
+        def train(self,times,step=None):
+            neuralNet.train(self,data,answer,times,step)
+    layers=[neuron_per_layer for i in range(layers)]
+    layers[-1]=answer.shape[0]
+    net=fixed_io_neural_net(data.shape[0],layers)
+    return net
+
+if __name__=='__main__':
+    def neural_net_test():
+        np.random.seed(1)
+        data=(np.array([11,36,33,20,29])*100).reshape(-1,1)
+        answer=np.array([0.5]).reshape(-1,1)
+        net=neuralNet(5,[10,10,20,1])
+        #5 inputs, 3 layers
+        net.train(data,answer,1000,100)
+        #net.train(data,answer,100,10)
     
-    #net.train(data,answer,100,10)
+    def data_test():
+        net=create_net_to_train('/home/ken/Codes/AI/examples/dnn/datasets/train_catvnoncat.h5',30,30)
+        net.train(100,10)
+    data_test()
