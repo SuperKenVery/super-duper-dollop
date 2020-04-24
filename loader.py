@@ -9,9 +9,10 @@ def load(filename,datakey,answerkey):
     data=data.reshape(-1,groups)
     answer=answer.reshape(-1,groups)
     
-    return data,answer
+    return data,answer,groups
 
 if __name__=='__main__':
-    data,answer=load('/home/ken/Codes/AI/examples/dnn/datasets/train_catvnoncat.h5','train_set_x','train_set_y')
+    data,answer,groups=load('/home/ken/Codes/AI/examples/dnn/datasets/train_catvnoncat.h5','train_set_x','train_set_y')
     print('data shape:',data.shape)
     print('answer shape:',answer.shape)
+    print('groups:',groups)

@@ -7,8 +7,6 @@ class rf:#reversable function
         self.reverse=reverse
     def __call__(self,*argv,**argvs):
         return self.function(*argv,**argvs)
-    def reverse(self,*argv,**argvs):
-        return self.reverse(*argv,**argvs)
 
 sigmoid=rf(
     function=lambda z: 1/(1+np.exp(-z)),
@@ -51,9 +49,11 @@ leaky_relu=rf(
 
 #前面的：z动一点，a动多少？
 def _loss(a,y):
-    left=-(a*np.log(y))
-    right=(1-a)*np.log(1-y)
-    return left+right
+    #cost = (-1 / m) * np.sum(np.multiply(Y, np.log(AL)) + np.multiply(1 - Y, np.log(1 - AL)))
+    left=np.multiply(y,np.log(a))
+    right=np.multiply(1-y,np.log(1-a))
+    loss=np.sum(left+right) * (-1/a.shape[1])
+    return loss
 def _loss_reverse(a,y):
     #a动一点点，L动多少？
     first=-(y/a)
@@ -64,7 +64,7 @@ loss=rf(
     reverse=_loss_reverse
     )
 
-if __name__=='__main__':
+def prevtest():
     np.random.seed(1)
     data=np.random.randn(10)
     tests={
@@ -91,3 +91,10 @@ if __name__=='__main__':
     for i in tests:
         print(i,'\t'*3,str(tests[i]).replace('\n',' '))
         
+def test2():
+    a=np.array([[0.3,0.2,0.03,0.4,0.5]])
+    y=np.array([[0.2,0.3,0.4,0.5,0.6]])
+    print(loss(a,y))
+
+if __name__=='__main__':
+    test2()
