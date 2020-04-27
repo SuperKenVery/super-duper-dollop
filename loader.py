@@ -12,7 +12,7 @@ def load(filename,datakey,answerkey):
     return data,answer,groups
 
 if __name__=='__main__':
-    data,answer,groups=load('/home/ken/Codes/AI/examples/dnn/datasets/train_catvnoncat.h5','train_set_x','train_set_y')
+    data,answer,groups=load('examples/dnn/datasets/train_catvnoncat.h5','train_set_x','train_set_y')
     print('data shape:',data.shape)
     print('answer shape:',answer.shape)
     print('groups:',groups)
