@@ -116,12 +116,12 @@ if __name__=='__main__':
         #net.train(data,answer,100,10)
     
     def data_test():
-        net=create_net_to_train('/home/ken/Codes/AI/examples/dnn/datasets/train_catvnoncat.h5',30,30)
+        net=create_net_to_train('examples/dnn/datasets/train_catvnoncat.h5',30,30)
         net.train(100,10)
     def data_test_without_createnettotrain():
         import loader
         print("loading data")
-        data,answer,groups=loader.load('/home/ken/Codes/AI/examples/dnn/datasets/train_catvnoncat.h5',
+        data,answer,groups=loader.load('examples/dnn/datasets/train_catvnoncat.h5',
                                     'train_set_x','train_set_y')
         #data=data[:,0].reshape(-1,1)
         #answer=answer[:,0].reshape(-1,1)
